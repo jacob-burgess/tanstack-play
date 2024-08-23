@@ -6,9 +6,7 @@ import { createServerFn } from "@tanstack/start";
 const filePath = "count.txt";
 
 async function readCount() {
-  return parseInt(
-    await fs.promises.readFile(filePath, "utf-8").catch(() => "0")
-  );
+  return Math.floor(Math.random() * 100);
 }
 
 const getCount = createServerFn("GET", () => {
@@ -17,7 +15,7 @@ const getCount = createServerFn("GET", () => {
 
 const updateCount = createServerFn("POST", async (addBy: number) => {
   const count = await readCount();
-  await fs.promises.writeFile(filePath, `${count + addBy}`);
+  // await fs.promises.writeFile(filePath, `${count + addBy}`);
 });
 
 export const Route = createFileRoute("/")({
@@ -30,14 +28,24 @@ function Home() {
   const state = Route.useLoaderData();
 
   return (
-    <button
-      onClick={() => {
-        updateCount(1).then(() => {
-          router.invalidate();
-        });
+    <div
+      style={{
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        flexDirection: "column",
+        height: "100vh",
       }}
     >
-      Add 1 to {state}?
-    </button>
+      <button
+        onClick={() => {
+          updateCount(1).then(() => {
+            router.invalidate();
+          });
+        }}
+      >
+        get new random? {state}
+      </button>
+    </div>
   );
 }
